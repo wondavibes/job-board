@@ -1,4 +1,3 @@
-# apps/applications/models.py
 from django.db import models
 from apps.accounts.models import User
 from apps.jobs.models import Job

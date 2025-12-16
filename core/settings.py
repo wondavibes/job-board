@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "apps.applications",
     "apps.companies",
     "apps.jobs",
+    "apps.pages",
     "rest_framework",
     "corsheaders",
     "rest_framework.authtoken",
