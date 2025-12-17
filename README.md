@@ -1,6 +1,5 @@
-# job-board
----
 
+---
 # Job Board Platform
 
 A Django-based job board application designed to connect **employers**, **companies**, and **candidates**. The platform supports custom user roles, company profiles, job postings, and candidate applications with resume uploads.
@@ -111,12 +110,3 @@ media/
 ```
 
 ---
-
-## 🤝 Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you’d like to add.
-
----
-
-✨ This README sets the stage for GitHub readers: it shows what’s working now, what’s coming soon, and how to get started locally.  
-
-Would you like me to also add a **“Future Enhancements” section** (e.g., search/filter jobs, notifications, API endpoints) so readers see the long-term vision beyond the 2‑week roadmap?
