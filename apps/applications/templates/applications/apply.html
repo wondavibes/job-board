@@ -1,0 +1,8 @@
+<h2>Apply for Job</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Application</button>
+</form>
+
+<a href="{% url 'job_detail' job.id %}">Back to Job Details</a>
