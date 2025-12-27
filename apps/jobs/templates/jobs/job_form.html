@@ -1,9 +1,16 @@
-<h2>{{ action|default:"Create Job" }}</h2>
+{% extends "base.html" %}
 
-<form method="POST">
+{% block title %}{{ action }}{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-bold mb-4">{{ action }}</h2>
+
+<form method="POST" class="space-y-4">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{{ action|default:"Post Job" }}</button>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        {{ action }}
+    </button>
 </form>
-
 <a href="{% url 'job_list' %}">Back to Jobs</a>
+{% endblock %}

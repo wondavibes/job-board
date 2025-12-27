@@ -1,6 +1,33 @@
-<h2>Login</h2>
-<form method="POST">
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-bold mb-4">Login</h2>
+
+<form method="POST" class="space-y-4">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
+    
+    <div>
+        <label for="username" class="block font-semibold">Username</label>
+        <input type="text" name="username" id="username" 
+               class="border rounded w-full p-2" required>
+    </div>
+
+    <div>
+        <label for="password" class="block font-semibold">Password</label>
+        <input type="password" name="password" id="password" 
+               class="border rounded w-full p-2" required>
+    </div>
+
+    <button type="submit" 
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Login
+    </button>
 </form>
+
+<p class="mt-4">
+    Don’t have an account? 
+    <a href="{% url 'register' %}" class="text-blue-600 hover:underline">Register here</a>
+</p>
+{% endblock %}

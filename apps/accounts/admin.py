@@ -4,6 +4,11 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User, Profile
 
 
+admin.site.site_header = "Job Board Administration"
+admin.site.site_title = "Job Board Admin Portal"
+admin.site.index_title = "Welcome to the Job Board Admin"
+
+
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False

@@ -2,10 +2,9 @@
 
 from django.shortcuts import render, get_object_or_404
 from .models import Job
-
+from .forms import JobForm
 from django.views.generic import CreateView, UpdateView, DeleteView
 from typing import cast
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from apps.accounts.mixins import EmployerRequiredMixin
 
@@ -20,11 +19,16 @@ def job_detail_view(request, job_id):
     return render(request, "jobs/job_detail.html", {"job": job})
 
 
-class JobCreateView(LoginRequiredMixin, EmployerRequiredMixin, CreateView):
+class JobCreateView(EmployerRequiredMixin, CreateView):
     model = Job
-    fields = ["title", "description", "location", "company"]  # adjust fields as needed
+    form_class = JobForm
     template_name = "jobs/job_form.html"
-    success_url = reverse_lazy("job_list")
+    success_url = reverse_lazy("employer_dashboard")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user  # pass user to form for company filtering
+        return kwargs
 
     def form_valid(self, form):
         form.instance.employer = self.request.user
@@ -36,25 +40,25 @@ class JobCreateView(LoginRequiredMixin, EmployerRequiredMixin, CreateView):
         return context
 
 
-class JobUpdateView(LoginRequiredMixin, EmployerRequiredMixin, UpdateView):
+class JobUpdateView(EmployerRequiredMixin, UpdateView):
     model = Job
     fields = ["title", "description", "location", "company"]  # adjust as needed
     template_name = "jobs/job_form.html"
     success_url = reverse_lazy("job_list")
 
-    # STEP 1: Ensure only the employer who created the job can edit it
+    # Ensure only the employer who created the job can edit it
     def test_func(self):
         job = cast(Job, self.get_object())
         return job.employer == self.request.user
 
-    # STEP 2: Optional — customize context if needed
+    # Optional — customize context if needed
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["action"] = "Update Job"
         return context
 
 
-class JobDeleteView(LoginRequiredMixin, EmployerRequiredMixin, DeleteView):
+class JobDeleteView(EmployerRequiredMixin, DeleteView):
     model = Job
     template_name = "jobs/job_confirm_delete.html"
     success_url = reverse_lazy("job_list")

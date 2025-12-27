@@ -6,6 +6,7 @@ from .models import User
 from typing import Optional
 from apps.jobs.models import Job
 from apps.applications.models import Application
+from .decorators import employer_required, candidate_required
 
 User = get_user_model()
 
@@ -48,6 +49,7 @@ def logout_view(request):
 
 
 @login_required
+@candidate_required
 def candidate_dashboard(request):
     # show only applications made by this candidate
     applications = Application.objects.filter(candidate=request.user)
@@ -57,17 +59,20 @@ def candidate_dashboard(request):
 
 
 @login_required
+@employer_required
 def employer_dashboard(request):
     # show only jobs posted by this employer
     jobs = Job.objects.filter(employer=request.user)
     return render(request, "accounts/employer_dashboard.html", {"jobs": jobs})
 
 
+@login_required
+@employer_required
 def job_applicants_view(request, job_id: int):
     job = get_object_or_404(Job, id=job_id, employer=request.user)
     applications = Application.objects.filter(job=job)
 
-    # HHandle application status updates
+    # Handle application status updates
     if request.method == "POST":
         application_id = request.POST.get("application_id")
         new_status = request.POST.get("status")

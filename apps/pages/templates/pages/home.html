@@ -1,2 +1,9 @@
-<h2>Welcome to the Job Board</h2>
-<p>Your project is coming together nicely.</p>
+{% extends "base.html" %}
+
+{% block title %}Home | Job Board{% endblock %}
+
+{% block content %}
+    <h2>Find Your Next Opportunity</h2>
+    <p>Browse job listings, apply as a candidate, or post jobs as an employer.</p>
+    <a href="{% url 'job_list' %}">Start Browsing Jobs</a>
+{% endblock %}

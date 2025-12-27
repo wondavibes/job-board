@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Create Company{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-bold mb-4">Create Your Company Profile</h2>
+
+<form method="POST" class="space-y-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Save Company
+    </button>
+</form>
+{% endblock %}

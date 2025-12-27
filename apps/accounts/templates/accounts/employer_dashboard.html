@@ -1,5 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Employer Dashboard{% endblock %}
+
+{% block content %}
 <h2 class="text-xl font-bold mb-4">Employer Dashboard</h2>
 <p class="mb-2">Welcome, {{ request.user.username }}. Here are your job postings:</p>
+
+<!-- Check if employer has a company -->
+{% if request.user.company_set.exists %}
+    <!-- Always show "Post a new job" button -->
+    <div class="mb-4">
+        <a href="{% url 'job_create' %}" 
+           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+           + Post a New Job
+        </a>
+    </div>
+{% else %}
+    <!-- Prompt employer to create company first -->
+    <div class="mb-4 p-4 border rounded bg-yellow-50">
+        You don’t have a company profile yet.
+        <a href="{% url 'company_create' %}" 
+           class="text-blue-600 hover:underline">Create Company Profile</a>
+        before posting jobs.
+    </div>
+{% endif %}
 
 <div class="space-y-4">
     {% for job in jobs %}
@@ -15,8 +39,13 @@
         </div>
     {% empty %}
         <div class="p-4 border rounded bg-yellow-50">
-            No jobs posted yet. 
-            <a href="{% url 'job_create' %}" class="text-blue-600 hover:underline">Post a new job</a>
+            No jobs posted yet.
+            {% if request.user.company_set.exists %}
+                <a href="{% url 'job_create' %}" class="text-blue-600 hover:underline">Post a new job</a>
+            {% else %}
+                <a href="{% url 'company_create' %}" class="text-blue-600 hover:underline">Create Company Profile</a>
+            {% endif %}
         </div>
     {% endfor %}
 </div>
+{% endblock %}

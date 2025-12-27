@@ -1,6 +1,47 @@
-<h2>Register</h2>
-<form method="POST">
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-bold mb-4">Create an Account</h2>
+
+<form method="POST" class="space-y-4">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
+
+    <div>
+        <label for="username" class="block font-semibold">Username</label>
+        <input type="text" name="username" id="username"
+               class="border rounded w-full p-2" required>
+    </div>
+
+    <div>
+        <label for="email" class="block font-semibold">Email</label>
+        <input type="email" name="email" id="email"
+               class="border rounded w-full p-2" required>
+    </div>
+
+    <div>
+        <label for="password" class="block font-semibold">Password</label>
+        <input type="password" name="password" id="password"
+               class="border rounded w-full p-2" required>
+    </div>
+
+    <div>
+        <label for="role" class="block font-semibold">Register as</label>
+        <select name="role" id="role" class="border rounded w-full p-2" required>
+            <option value="candidate">Candidate</option>
+            <option value="employer">Employer</option>
+        </select>
+    </div>
+
+    <button type="submit"
+            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Register
+    </button>
 </form>
+
+<p class="mt-4">
+    Already have an account?
+    <a href="{% url 'login' %}" class="text-blue-600 hover:underline">Login here</a>
+</p>
+{% endblock %}
