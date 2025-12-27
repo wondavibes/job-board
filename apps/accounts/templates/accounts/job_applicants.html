@@ -1,0 +1,26 @@
+<h2>Applicants for {{ job.title }}</h2>
+
+<div class="space-y-4">
+    {% for app in applications %}
+        <div class="p-4 border rounded shadow-sm">
+            <div><strong>Candidate:</strong> {{ app.candidate.username }}</div>
+            <div><strong>Status:</strong> {{ app.status }}</div>
+            <div><strong>Cover Letter:</strong> {{ app.cover_letter }}</div>
+            <div><a href="{{ app.resume.url }}">Download Resume</a></div>
+
+            <!-- Status update form -->
+            <form method="POST" class="mt-2">
+                {% csrf_token %}
+                <input type="hidden" name="application_id" value="{{ app.id }}">
+                <select name="status">
+                    <option value="pending" {% if app.status == "pending" %}selected{% endif %}>Pending</option>
+                    <option value="accepted" {% if app.status == "accepted" %}selected{% endif %}>Accepted</option>
+                    <option value="rejected" {% if app.status == "rejected" %}selected{% endif %}>Rejected</option>
+                </select>
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    {% empty %}
+        <div>No applicants yet.</div>
+    {% endfor %}
+</div>

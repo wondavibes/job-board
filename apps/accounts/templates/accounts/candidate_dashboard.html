@@ -1,0 +1,22 @@
+<h2 class="text-xl font-bold mb-4">Candidate Dashboard</h2>
+<p class="mb-2">Welcome, {{ request.user.username }}. Here are your applications:</p>
+
+<div class="space-y-4">
+    {% for app in applications %}
+        <div class="p-4 border rounded shadow-sm">
+            <div class="font-semibold">{{ app.job.title }}</div>
+            <div class="text-sm text-gray-600">{{ app.job.company.name }}</div>
+            <div class="mt-2">
+                <span class="text-gray-700">Status: {{ app.status }}</span>
+            </div>
+            <div class="mt-2">
+                <a href="{% url 'job_detail' app.job.id %}" class="text-blue-600 hover:underline">View Job</a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="p-4 border rounded bg-yellow-50">
+            No applications yet. 
+            <a href="{% url 'job_list' %}" class="text-blue-600 hover:underline">Browse jobs</a>
+        </div>
+    {% endfor %}
+</div>

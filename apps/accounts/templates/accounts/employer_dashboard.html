@@ -1,0 +1,22 @@
+<h2 class="text-xl font-bold mb-4">Employer Dashboard</h2>
+<p class="mb-2">Welcome, {{ request.user.username }}. Here are your job postings:</p>
+
+<div class="space-y-4">
+    {% for job in jobs %}
+        <div class="p-4 border rounded shadow-sm">
+            <div class="font-semibold">{{ job.title }}</div>
+            <div class="text-sm text-gray-600">{{ job.location }}</div>
+            <div class="mt-2 space-x-2">
+                <a href="{% url 'job_detail' job.id %}" class="text-blue-600 hover:underline">View</a>
+                <a href="{% url 'job_update' job.id %}" class="text-green-600 hover:underline">Edit</a>
+                <a href="{% url 'job_delete' job.id %}" class="text-red-600 hover:underline">Delete</a>
+                <a href="{% url 'job_applicants' job.id %}" class="text-purple-600 hover:underline">Applicants</a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="p-4 border rounded bg-yellow-50">
+            No jobs posted yet. 
+            <a href="{% url 'job_create' %}" class="text-blue-600 hover:underline">Post a new job</a>
+        </div>
+    {% endfor %}
+</div>

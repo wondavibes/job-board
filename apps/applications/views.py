@@ -4,9 +4,11 @@ from django.urls import reverse, reverse_lazy
 from .models import Application
 from .forms import ApplicationForm
 from apps.jobs.models import Job
+from apps.accounts.mixins import CandidateRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class ApplyToJobView(CreateView):
+class ApplyToJobView(CreateView, LoginRequiredMixin, CandidateRequiredMixin):
     model = Application
     form_class = ApplicationForm
     template_name = "applications/apply.html"
