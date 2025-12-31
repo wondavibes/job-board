@@ -5,18 +5,15 @@ from .views import (
     logout_view,
     candidate_dashboard,
     employer_dashboard,
-    job_applicants_view,
 )
+
+from .views import home_view
 
 urlpatterns = [
     path("register/", register_view, name="register"),
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
+    path("", home_view, name="home"),
     path("candidate/dashboard", candidate_dashboard, name="candidate_dashboard"),
     path("employer/dashboard", employer_dashboard, name="employer_dashboard"),
-    path(
-        "employer/job/<int:job_id>/applicants/",
-        job_applicants_view,
-        name="job_applicants",
-    ),
 ]

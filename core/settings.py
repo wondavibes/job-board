@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "apps.applications",
     "apps.companies",
     "apps.jobs",
-    "apps.pages",
     "rest_framework",
     "corsheaders",
     "rest_framework.authtoken",
@@ -62,7 +61,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

@@ -66,23 +66,5 @@ def employer_dashboard(request):
     return render(request, "accounts/employer_dashboard.html", {"jobs": jobs})
 
 
-@login_required
-@employer_required
-def job_applicants_view(request, job_id: int):
-    job = get_object_or_404(Job, id=job_id, employer=request.user)
-    applications = Application.objects.filter(job=job)
-
-    # Handle application status updates
-    if request.method == "POST":
-        application_id = request.POST.get("application_id")
-        new_status = request.POST.get("status")
-        if application_id and new_status in ["pending", "accepted", "rejected"]:
-            app = get_object_or_404(Application, id=application_id, job=job)
-            app.status = new_status
-            app.save()
-
-    return render(
-        request,
-        "accounts/job_applicants.html",
-        {"job": job, "applications": applications},
-    )
+def home_view(request):
+    return render(request, "home.html")

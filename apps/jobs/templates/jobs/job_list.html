@@ -1,15 +1,52 @@
-<h2>Available Jobs</h2>
+{% extends "base.html" %}
 
-{% if jobs %}
-    <ul>
-        {% for job in jobs %}
-            <li>
-                <strong>{{ job.title }}</strong><br>
-                {{ job.company.name }} — {{ job.location }}<br>
-                <a href="{% url 'job_detail' job.id %}">View Details</a>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No jobs available yet.</p>
-{% endif %}
+{% block title %}Browse Jobs{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Available Jobs</h2>
+
+<!-- Search bar -->
+<form method="GET" class="mb-6 flex space-x-2">
+    <input type="text" name="q" value="{{ search_query }}"
+           placeholder="Search jobs..."
+           class="border rounded px-3 py-2 w-full focus:ring focus:ring-blue-300">
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Search
+    </button>
+</form>
+
+<!-- Job listings -->
+<div class="space-y-6">
+    {% for job in jobs %}
+        <div class="p-6 border rounded-lg shadow-sm bg-white">
+            <h3 class="text-xl font-semibold">{{ job.title }}</h3>
+            <p class="text-gray-600">{{ job.company.name }} — {{ job.location }}</p>
+            <p class="mt-2 text-gray-700">{{ job.description|truncatewords:30 }}</p>
+            <a href="{% url 'job_detail' job.id %}" class="text-blue-600 hover:underline mt-2 inline-block">
+                View Details
+            </a>
+        </div>
+    {% empty %}
+        <div class="p-6 border rounded-lg bg-yellow-50 text-gray-700">
+            No jobs found. Try adjusting your search.
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+<div class="mt-6 flex justify-center space-x-2">
+    {% if jobs.has_previous %}
+        <a href="?q={{ search_query }}&page={{ jobs.previous_page_number }}"
+           class="px-3 py-1 border rounded hover:bg-gray-100">Previous</a>
+    {% endif %}
+
+    <span class="px-3 py-1 border rounded bg-gray-200">
+        Page {{ jobs.number }} of {{ jobs.paginator.num_pages }}
+    </span>
+
+    {% if jobs.has_next %}
+        <a href="?q={{ search_query }}&page={{ jobs.next_page_number }}"
+           class="px-3 py-1 border rounded hover:bg-gray-100">Next</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,8 +1,15 @@
-<h2>Apply for Job</h2>
-<form method="post" enctype="multipart/form-data">
+{% extends "base.html" %}
+
+{% block title %}Apply for Job{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-bold mb-4">Apply for {{ job.title }}</h2>
+
+<form method="POST" enctype="multipart/form-data" class="space-y-4">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Submit Application</button>
+    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Submit Application
+    </button>
 </form>
-
-<a href="{% url 'job_detail' job.id %}">Back to Job Details</a>
+{% endblock %}

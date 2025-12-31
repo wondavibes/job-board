@@ -3,15 +3,34 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Job
 from .forms import JobForm
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from typing import cast
 from django.urls import reverse_lazy
-from apps.accounts.mixins import EmployerRequiredMixin
+from apps.accounts.mixins import EmployerRequiredMixin 
+from django.db.models import Q
 
+class JobListView(ListView):
+    model = Job
+    template_name = "jobs/job_list.html"
+    context_object_name = "jobs"
+    paginate_by = 5  # show 5 jobs per page
 
-def job_list_view(request):
-    jobs = Job.objects.all().order_by("-posted_at")
-    return render(request, "jobs/job_list.html", {"jobs": jobs})
+    def get_queryset(self):
+        queryset = Job.objects.all().order_by("-created_at")
+        query = self.request.GET.get("q")
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(location__icontains=query) |
+                Q(company__name__icontains=query)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_query"] = self.request.GET.get("q", "")
+        return context
 
 
 def job_detail_view(request, job_id):
@@ -51,6 +70,7 @@ class JobUpdateView(EmployerRequiredMixin, UpdateView):
         job = cast(Job, self.get_object())
         return job.employer == self.request.user
 
+    #
     # Optional — customize context if needed
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

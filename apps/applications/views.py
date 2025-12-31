@@ -1,14 +1,14 @@
-from django.views.generic import CreateView
-from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import CreateView, ListView
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from .models import Application
 from .forms import ApplicationForm
 from apps.jobs.models import Job
-from apps.accounts.mixins import CandidateRequiredMixin
+from apps.accounts.mixins import CandidateRequiredMixin, EmployerRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class ApplyToJobView(CreateView, LoginRequiredMixin, CandidateRequiredMixin):
+class ApplyToJobView(LoginRequiredMixin, CandidateRequiredMixin, CreateView):
     model = Application
     form_class = ApplicationForm
     template_name = "applications/apply.html"
@@ -32,3 +32,38 @@ class ApplyToJobView(CreateView, LoginRequiredMixin, CandidateRequiredMixin):
         context = super().get_context_data(**kwargs)
         context["job"] = self.job
         return context
+
+
+class JobApplicantsView(EmployerRequiredMixin, ListView):
+    model = Application
+    template_name = "applications/job_applicants.html"
+    context_object_name = "applications"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.job = get_object_or_404(Job, id=kwargs.get("job_id"), employer=request.user)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return (
+            Application.objects.filter(job=self.job)
+            .select_related("candidate")
+            .order_by("-applied_at")
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["job"] = self.job
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        application_id = request.POST.get("application_id")
+        new_status = request.POST.get("status")
+
+        # Use Application.Status.values directly (model defines Status)
+        valid_statuses = Application.Status.values
+        if application_id and new_status in valid_statuses:
+            Application.objects.filter(id=application_id, job=self.job).update(status=new_status)
+
+        return redirect("job_applicants", job_id=self.job.pk)
+
+        
