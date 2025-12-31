@@ -4,28 +4,30 @@
 
 {% block content %}
 <h2 class="text-xl font-bold mb-4">Employer Dashboard</h2>
-<p class="mb-2">Welcome, {{ request.user.username }}. Here are your job postings:</p>
+<p class="mb-2">Welcome, {{ request.user.username }}.</p>
 
-<!-- Check if employer has a company -->
-{% if request.user.company_set.exists %}
-    <!-- Always show "Post a new job" button -->
-    <div class="mb-4">
-        <a href="{% url 'job_create' %}" 
-           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-           + Post a New Job
-        </a>
-    </div>
-{% else %}
-    <!-- Prompt employer to create company first -->
-    <div class="mb-4 p-4 border rounded bg-yellow-50">
-        You don’t have a company profile yet.
-        <a href="{% url 'company_create' %}" 
-           class="text-blue-600 hover:underline">Create Company Profile</a>
-        before posting jobs.
-    </div>
-{% endif %}
+<!-- Company Section -->
+<div class="mb-6 p-4 border rounded bg-gray-50">
+    {% if request.user.companies.exists %}
+        {% with company=request.user.companies.first %}
+            <h3 class="text-lg font-semibold">Your Company</h3>
+            <p><strong>{{ company.name }}</strong> — {{ company.industry }}</p>
+            <p class="text-sm text-gray-600">{{ company.location }}</p>
+            <p class="mt-2">{{ company.description }}</p>
+            <div class="mt-2 space-x-2">
+                <a href="{% url 'company_update' company.id %}" class="text-green-600 hover:underline">Edit Company</a>
+                <a href="{% url 'company_delete' company.id %}" class="text-red-600 hover:underline">Delete Company</a>
+            </div>
+        {% endwith %}
+    {% else %}
+        <p class="text-yellow-700">You don’t have a company profile yet.</p>
+        <a href="{% url 'company_create' %}" class="text-blue-600 hover:underline">Create Company Profile</a>
+    {% endif %}
+</div>
 
+<!-- Job Postings Section -->
 <div class="space-y-4">
+    <h3 class="text-lg font-semibold">Job Postings</h3>
     {% for job in jobs %}
         <div class="p-4 border rounded shadow-sm">
             <div class="font-semibold">{{ job.title }}</div>
@@ -38,14 +40,14 @@
             </div>
         </div>
     {% empty %}
-        <div class="p-4 border rounded bg-yellow-50">
-            No jobs posted yet.
-            {% if request.user.company_set.exists %}
-                <a href="{% url 'job_create' %}" class="text-blue-600 hover:underline">Post a new job</a>
-            {% else %}
-                <a href="{% url 'company_create' %}" class="text-blue-600 hover:underline">Create Company Profile</a>
-            {% endif %}
-        </div>
+        <p class="text-gray-600">No jobs posted yet.</p>
     {% endfor %}
+</div>
+
+<!-- Always show Post Job button -->
+<div class="mt-6">
+    <a href="{% url 'job_create' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        + Post a new job
+    </a>
 </div>
 {% endblock %}
