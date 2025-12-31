@@ -6,8 +6,9 @@ from .forms import JobForm
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from typing import cast
 from django.urls import reverse_lazy
-from apps.accounts.mixins import EmployerRequiredMixin 
+from apps.accounts.mixins import EmployerRequiredMixin
 from django.db.models import Q
+
 
 class JobListView(ListView):
     model = Job
@@ -16,14 +17,14 @@ class JobListView(ListView):
     paginate_by = 5  # show 5 jobs per page
 
     def get_queryset(self):
-        queryset = Job.objects.all().order_by("-created_at")
+        queryset = Job.objects.all().order_by("-posted_at")
         query = self.request.GET.get("q")
         if query:
             queryset = queryset.filter(
-                Q(title__icontains=query) |
-                Q(description__icontains=query) |
-                Q(location__icontains=query) |
-                Q(company__name__icontains=query)
+                Q(title__icontains=query)
+                | Q(description__icontains=query)
+                | Q(location__icontains=query)
+                | Q(company__name__icontains=query)
             )
         return queryset
 

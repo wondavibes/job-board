@@ -12,4 +12,4 @@ class JobForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if user and user.role == "employer":
             # Limit companies to those owned by this employer
-            self.fields["company"].queryset = user.company_set.all()
+            self.fields["company"].queryset = user.companies.all()

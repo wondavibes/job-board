@@ -4,37 +4,44 @@
     <meta charset="UTF-8">
     <title>{% block title %}Job Board{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     {% block extra_head %}{% endblock %}
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <h1>Job Board</h1>
-        <nav>
-            <a href="{% url 'home' %}">Home</a> |
-            <a href="{% url 'job_list' %}">Browse Jobs</a> |
-            {% if user.is_authenticated %}
-                {% if user.role == "employer" %}
-                    <a href="{% url 'employer_dashboard' %}">Employer Dashboard</a> |
-                {% elif user.role == "candidate" %}
-                    <a href="{% url 'candidate_dashboard' %}">Candidate Dashboard</a> |
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Header / Navbar -->
+    <header class="bg-blue-600 text-white">
+        <div class="container mx-auto flex justify-between items-center px-6 py-4">
+            <h1 class="text-xl font-bold">Job Board</h1>
+            <nav class="space-x-4">
+                <a href="{% url 'home' %}" class="hover:underline">Home</a>
+                <a href="{% url 'job_list' %}" class="hover:underline">Browse Jobs</a>
+                {% if user.is_authenticated %}
+                    {% if user.role == "employer" %}
+                        <a href="{% url 'employer_dashboard' %}" class="hover:underline">Employer Dashboard</a>
+                    {% elif user.role == "candidate" %}
+                        <a href="{% url 'candidate_dashboard' %}" class="hover:underline">Candidate Dashboard</a>
+                    {% endif %}
+                    <a href="{% url 'logout' %}" class="hover:underline">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="hover:underline">Login</a>
+                    <a href="{% url 'register' %}" class="hover:underline">Sign Up</a>
                 {% endif %}
-                <a href="{% url 'logout' %}">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}">Login</a> |
-                <a href="{% url 'register' %}">Sign Up</a>
-            {% endif %}
-        </nav>
+            </nav>
+        </div>
     </header>
 
     <!-- Main content -->
-    <main>
+    <main class="container mx-auto px-6 py-8">
         {% block content %}
         {% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer>
+    <footer class="bg-gray-800 text-gray-300 text-center py-4 mt-10">
         <p>&copy; {{ now|date:"Y" }} Job Board. All rights reserved.</p>
     </footer>
 </body>

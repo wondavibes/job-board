@@ -3,33 +3,34 @@
 {% block title %}Employer Dashboard{% endblock %}
 
 {% block content %}
-<h2 class="text-xl font-bold mb-4">Employer Dashboard</h2>
-<p class="mb-2">Welcome, {{ request.user.username }}.</p>
-
-<!-- Company Section -->
-<div class="mb-6 p-4 border rounded bg-gray-50">
-    {% if request.user.companies.exists %}
-        {% with company=request.user.companies.first %}
-            <h3 class="text-lg font-semibold">Your Company</h3>
-            <p><strong>{{ company.name }}</strong> — {{ company.industry }}</p>
-            <p class="text-sm text-gray-600">{{ company.location }}</p>
-            <p class="mt-2">{{ company.description }}</p>
-            <div class="mt-2 space-x-2">
-                <a href="{% url 'company_update' company.id %}" class="text-green-600 hover:underline">Edit Company</a>
-                <a href="{% url 'company_delete' company.id %}" class="text-red-600 hover:underline">Delete Company</a>
-            </div>
-        {% endwith %}
-    {% else %}
-        <p class="text-yellow-700">You don’t have a company profile yet.</p>
-        <a href="{% url 'company_create' %}" class="text-blue-600 hover:underline">Create Company Profile</a>
-    {% endif %}
-</div>
+<!-- Hero Section -->
+<section class="bg-blue-600 text-white rounded-lg shadow-md p-10 text-center mb-8">
+    <h2 class="text-3xl font-bold mb-2">Welcome, {{ request.user.username }}</h2>
+    <p class="text-lg mb-4">Manage your company profile and job postings with ease.</p>
+    <div class="space-x-4">
+        {% if company %}
+            <a href="{% url 'company_update' company.id %}" 
+               class="bg-white text-blue-600 px-6 py-2 rounded font-semibold hover:bg-gray-100">
+                Edit Company Profile
+            </a>
+        {% else %}
+            <a href="{% url 'company_create' %}" 
+               class="bg-yellow-400 text-gray-900 px-6 py-2 rounded font-semibold hover:bg-yellow-300">
+                Create Company Profile
+            </a>
+        {% endif %}
+        <a href="{% url 'job_create' %}" 
+           class="bg-green-400 text-gray-900 px-6 py-2 rounded font-semibold hover:bg-green-300">
+            + Post a New Job
+        </a>
+    </div>
+</section>
 
 <!-- Job Postings Section -->
 <div class="space-y-4">
-    <h3 class="text-lg font-semibold">Job Postings</h3>
+    <h3 class="text-xl font-semibold mb-4">Your Job Postings</h3>
     {% for job in jobs %}
-        <div class="p-4 border rounded shadow-sm">
+        <div class="p-4 bg-white border rounded shadow-sm">
             <div class="font-semibold">{{ job.title }}</div>
             <div class="text-sm text-gray-600">{{ job.location }}</div>
             <div class="mt-2 space-x-2">
@@ -42,12 +43,5 @@
     {% empty %}
         <p class="text-gray-600">No jobs posted yet.</p>
     {% endfor %}
-</div>
-
-<!-- Always show Post Job button -->
-<div class="mt-6">
-    <a href="{% url 'job_create' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-        + Post a new job
-    </a>
 </div>
 {% endblock %}

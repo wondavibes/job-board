@@ -65,5 +65,3 @@ class JobApplicantsView(EmployerRequiredMixin, ListView):
             Application.objects.filter(id=application_id, job=self.job).update(status=new_status)
 
         return redirect("job_applicants", job_id=self.job.pk)
-
-        

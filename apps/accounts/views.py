@@ -4,6 +4,7 @@ from .forms import RegisterForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from .models import User
 from typing import Optional
+from apps.companies.models import Company
 from apps.jobs.models import Job
 from apps.applications.models import Application
 from .decorators import employer_required, candidate_required
@@ -29,7 +30,7 @@ def login_view(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        user: User = authenticate(request, username=username, password=password)
+        user: User = authenticate(request, username=username, password=password) #type: ignore
 
         if user is not None:
             login(request, user)
@@ -63,7 +64,10 @@ def candidate_dashboard(request):
 def employer_dashboard(request):
     # show only jobs posted by this employer
     jobs = Job.objects.filter(employer=request.user)
-    return render(request, "accounts/employer_dashboard.html", {"jobs": jobs})
+    company = request.user.companies.first()
+    return render(
+        request, "accounts/employer_dashboard.html", {"jobs": jobs, "company": company}
+    )
 
 
 def home_view(request):
