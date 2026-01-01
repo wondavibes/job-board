@@ -1,9 +1,26 @@
-<h2>Delete Job</h2>
+{% extends "base.html" %}
 
-<p>Are you sure you want to delete the job "{{ object.title }}"?</p>
+{% block title %}Delete Job{% endblock %}
 
-<form method="POST">
-    {% csrf_token %}
-    <button type="submit">Yes, delete</button>
-    <a href="{% url 'job_detail' object.pk %}">Cancel</a>
-</form>
+{% block content %}
+<div class="max-w-xl mx-auto bg-white rounded-lg shadow-md p-8 text-center">
+    <h2 class="text-2xl font-bold text-red-600 mb-4">Delete Job</h2>
+
+    <p class="mb-6 text-gray-700">
+        Are you sure you want to delete the job 
+        <span class="font-semibold">"{{ object.title }}"</span>?
+    </p>
+
+    <form method="POST" class="flex justify-center space-x-4">
+        {% csrf_token %}
+        <button type="submit" 
+                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+            Yes, delete
+        </button>
+        <a href="{% url 'job_detail' object.pk %}" 
+           class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">
+            Cancel
+        </a>
+    </form>
+</div>
+{% endblock %}

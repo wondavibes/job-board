@@ -1,9 +1,29 @@
-<h2>{{ job.title }}</h2>
+{% extends "base.html" %}
 
-<p><strong>Company:</strong> {{ job.company.name }}</p>
-<p><strong>Location:</strong> {{ job.location }}</p>
-<p><strong>Description:</strong></p>
-<p>{{ job.description }}</p>
+{% block title %}{{ job.title }}{% endblock %}
 
-<a href="{% url 'apply_to_job' job.id %}">Apply Now</a>
-<a href="/jobs/">Back to Jobs</a>
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
+    <h2 class="text-3xl font-bold mb-4 text-blue-600">{{ job.title }}</h2>
+
+    <p class="mb-2">
+        <span class="font-semibold">Company:</span> {{ job.company.name }}
+    </p>
+    <p class="mb-2">
+        <span class="font-semibold">Location:</span> {{ job.location }}
+    </p>
+    <p class="mt-4 font-semibold">Description:</p>
+    <p class="text-gray-700 mb-6">{{ job.description }}</p>
+
+    <div class="flex space-x-4">
+        <a href="{% url 'apply_to_job' job.id %}" 
+           class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Apply Now
+        </a>
+        <a href="{% url 'job_list' %}" 
+           class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">
+            Back to Jobs
+        </a>
+    </div>
+</div>
+{% endblock %}
