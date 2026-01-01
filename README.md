@@ -30,83 +30,119 @@ A Django-based job board application designed to connect **employers**, **compan
 - Admin setup for applications.
 
 ### ✅ Media Handling
-- Configured `MEDIA_ROOT` and `MEDIA_URL`.
-- Automatic directory creation for `resumes/` and `avatars/` upon first upload.
-- Admin interface supports file uploads.
+# Job Board
 
----
+A simple Django-based job board application providing job listings, company profiles, user accounts for candidates and employers, and application management.
 
-## 📅 Roadmap (Next 2 Weeks)
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Running Locally](#running-locally)
+- [Testing](#testing)
+- [Deployment Notes](#deployment-notes)
+- [Contributing](#contributing)
+- [License](#license)
 
-### Week 1
-- [ ] Inline admin setup: edit `Profile` directly within `User` admin.
-- [ ] Candidate avatar upload support (`media/avatars/`).
-- [ ] Basic templates for job listings and applications.
-- [ ] User registration and login views (with role assignment).
+## Project Overview
 
-### Week 2
-- [ ] Employer dashboard: create and manage jobs.
-- [ ] Candidate dashboard: apply to jobs and track applications.
-- [ ] Company dashboard: manage company details and associated jobs.
-- [ ] File upload validation (resume formats: PDF/DOCX).
-- [ ] Initial styling with Bootstrap/Tailwind.
+This repository implements a job board built with Django. It supports:
+- Employer accounts to post and manage jobs and company profiles.
+- Candidate accounts to browse jobs and submit applications.
+- Application tracking and basic dashboards for each user type.
 
----
+## Features
 
-## 🛠️ Tech Stack
-- **Backend:** Django 5.x
-- **Database:** PostgreSQL (configurable)
-- **Frontend:** Django templates (to be extended with modern UI framework)
-- **Storage:** Local `media/` directory for uploads (S3 support planned)
+- Authentication (register / login / logout)
+- Role-based dashboards (candidate / employer)
+- CRUD for jobs and companies (employers)
+- Job application submission and status management
+- Template-based views for common pages
 
----
+## Tech Stack
 
-## ⚡ Getting Started
+- Python 3.x
+- Django (see `requirements.txt` for exact versions)
+- SQLite (default development DB: `db.sqlite3`)
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/<your-username>/job-board.git
-   cd job-board
-   ```
+## Project Structure
+
+Top-level folders and notable apps:
+- `apps/accounts` — user models, auth forms, dashboards
+- `apps/jobs` — job models, views, templates
+- `apps/companies` — company profiles and forms
+- `apps/applications` — application records and statuses
+- `core` — project settings and URL configuration
+
+## Requirements
+
+Install dependencies from `requirements.txt` (created via `pip freeze` in this workspace).
+
+## Installation
+
+1. Create and activate a virtual environment:
+
+```bash
+python -m venv .venv
+.
+# Windows (PowerShell)
+.\.venv\Scripts\Activate.ps1
+```
 
 2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
 
-3. Apply migrations:
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-4. Create a superuser:
-   ```bash
-   python manage.py createsuperuser
-   ```
+3. Apply database migrations:
 
-5. Run the server:
-   ```bash
-   python manage.py runserver
-   ```
+```bash
+python manage.py migrate
+```
 
-6. Access the admin at:
-   ```
-   http://127.0.0.1:8000/admin
-   ```
+4. Create a superuser (optional):
+
+```bash
+python manage.py createsuperuser
+```
+
+## Running Locally
+
+Start the development server:
+
+```bash
+python manage.py runserver
+```
+
+Open your browser at `http://127.0.0.1:8000/`.
+
+## Testing
+
+Run the Django test suite:
+
+```bash
+python manage.py test
+```
+
+## Deployment Notes
+
+- Replace SQLite with PostgreSQL (or another production-ready DB).
+- Configure `DEBUG=False` and proper `ALLOWED_HOSTS` in `core/settings.py`.
+- Serve static files via a CDN or `collectstatic` behind a web server.
+- Use environment variables for secret keys and DB credentials.
+
+## Contributing
+
+Contributions are welcome. Suggested workflow:
+
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feat/my-change`.
+3. Add tests and ensure existing tests pass.
+4. Open a pull request describing your changes.
 
 ---
 
-## 📂 Project Structure
-```
-apps/
-  accounts/      # Custom User + Profile
-  companies/     # Company model
-  jobs/          # Job postings
-  applications/  # Candidate applications
-media/
-  resumes/       # Uploaded resumes
-  avatars/       # Candidate avatars (planned)
-```
-
----
