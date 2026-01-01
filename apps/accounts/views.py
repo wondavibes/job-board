@@ -8,6 +8,7 @@ from apps.companies.models import Company
 from apps.jobs.models import Job
 from apps.applications.models import Application
 from .decorators import employer_required, candidate_required
+from django.contrib import messages
 
 User = get_user_model()
 
@@ -30,7 +31,7 @@ def login_view(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        user: User = authenticate(request, username=username, password=password) #type: ignore
+        user: User = authenticate(request, username=username, password=password)  # type: ignore
 
         if user is not None:
             login(request, user)
@@ -40,6 +41,10 @@ def login_view(request):
                 return redirect("candidate_dashboard")
             elif user.role == "employer":
                 return redirect("employer_dashboard")
+
+        else:
+            messages.error(request, "Invalid username or password.")
+            return redirect("login")
 
     return render(request, "accounts/login.html")
 
