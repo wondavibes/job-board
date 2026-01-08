@@ -8,6 +8,7 @@ from typing import cast
 from django.urls import reverse_lazy
 from apps.accounts.mixins import EmployerRequiredMixin
 from django.db.models import Q
+from django.db import IntegrityError
 
 
 class JobListView(ListView):

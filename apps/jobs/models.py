@@ -17,5 +17,13 @@ class Job(models.Model):
     location = models.CharField(max_length=100)
     posted_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["company", "title", "description"],
+                name="unique_job_per_company",
+            )
+        ]
+
     def __str__(self):
         return f"{self.title} @ {self.company.name}"
