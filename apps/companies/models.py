@@ -5,11 +5,11 @@ from django.utils import timezone
 
 class Company(models.Model):
     name = models.CharField(max_length=200)
-    owner = models.ForeignKey(
+    owner = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         limit_choices_to={"role": "employer"},
-        related_name="companies",
+        related_name="company",
         null=True,
         blank=True,
     )
@@ -18,6 +18,9 @@ class Company(models.Model):
     location = models.CharField(max_length=100)
     website = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name_plural = "Companies"  # Fixes "Companys" in Django Admin
 
     def __str__(self):
         return self.name

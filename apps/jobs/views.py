@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from apps.accounts.mixins import EmployerRequiredMixin
 from django.db.models import Q
 from django.db import IntegrityError
+from apps.accounts.models import User
 
 
 class JobListView(ListView):
@@ -48,11 +49,14 @@ class JobCreateView(EmployerRequiredMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user  # pass user to form for company filtering
+        kwargs["user"] = self.request.user  # Needed for form validation
         return kwargs
 
     def form_valid(self, form):
-        form.instance.employer = self.request.user
+        # Assign values directly to the model instance
+        user = cast(User, self.request.user)
+        form.instance.employer = user
+        form.instance.company = user.company  # type: ignore[attr-defined]
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
