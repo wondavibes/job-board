@@ -3,8 +3,6 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from .models import User
-from typing import Optional
-from apps.companies.models import Company
 from apps.jobs.models import Job
 from apps.applications.models import Application
 from .decorators import employer_required, candidate_required
@@ -69,7 +67,7 @@ def candidate_dashboard(request):
 def employer_dashboard(request):
     # show only jobs posted by this employer
     jobs = Job.objects.filter(employer=request.user)
-    company = request.user.companies.first()
+    company = request.user.company
     return render(
         request, "accounts/employer_dashboard.html", {"jobs": jobs, "company": company}
     )
