@@ -3,14 +3,19 @@ from .models import Company
 
 
 class CompanyForm(forms.ModelForm):
+    website = forms.URLField(
+        required=False,
+        assume_scheme="https",
+        # Using TextInput bypasses the browser's strict <input type="url"> check
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "www.example.com",
+                "class": "w-full p-2 border rounded",  # Example Tailwind classes
+            }
+        ),
+    )
+
     class Meta:
         model = Company
-        fields = "__all__"
-
-    def clean_website(self):
-        website = self.cleaned_data.get("website")
-
-        if website and not website.startswith(("http://", "https://")):
-            website = "https://" + website
-
-        return website
+        # Listing fields explicitly is safer than "__all__"
+        fields = ["name", "industry", "description", "location", "website"]
